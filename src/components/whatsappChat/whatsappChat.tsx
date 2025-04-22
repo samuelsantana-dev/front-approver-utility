@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, IconButton, Typography, TextField, Paper } from '@mui/material';
 import { ArrowLeft, MoreVertical, Smile, Paperclip, Camera, Mic } from 'lucide-react';
 
@@ -9,6 +8,7 @@ interface WhatsAppChatProps {
   onBackClick?: () => void;
   onSendMessage?: (message: string) => void;
   initialMessages?: Message[];
+  templateContent?: string;
 }
 
 interface Message {
@@ -23,11 +23,43 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   contactAvatar = "/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png",
   onBackClick = () => console.log('Back button clicked'),
   onSendMessage,
-  initialMessages = []
+  initialMessages = [],
+  templateContent = ''
 }) => {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
-  const [message, setMessage] = useState('');
+  const [messages, setMessages] = useState<Message[]>(() => {
+    if (templateContent) {
+      return [
+        ...initialMessages,
+        {
+          id: 'template',
+          text: templateContent,
+          sender: 'contact',
+          timestamp: new Date()
+        }
+      ];
+    }
+    return initialMessages;
+  });
   
+  const [message, setMessage] = useState('');
+
+  useEffect(() => {
+    if (templateContent) {
+      setMessages(prev => {
+        const filtered = prev.filter(msg => msg.id !== 'template');
+        return [
+          ...filtered,
+          {
+            id: 'template',
+            text: templateContent,
+            sender: 'contact',
+            timestamp: new Date()
+          }
+        ];
+      });
+    }
+  }, [templateContent]);
+
   const handleSendMessage = (e: React.FormEvent) => {
     e.preventDefault();
     if (message.trim()) {
@@ -118,24 +150,29 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
             key={msg.id}
             sx={{
               maxWidth: '80%',
-              bgcolor: msg.sender === 'user' ? '#DCF8C6' : 'white',
+              bgcolor: msg.id === 'template' ? '#EDF7FF' : 
+              msg.sender === 'user' ? '#DCF8C6' : 'white',
               borderRadius: 2,
               p: 1,
               mb: 1,
-              ml: msg.sender === 'user' ? 'auto' : 0
+              ml: msg.sender === 'user' ? 'auto' : 0,
+              border: msg.id === 'template' ? '1px dashed #128C7E' : 'none',
+              boxShadow: msg.id === 'template' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
             }}
           >
             <Typography variant="body2">{msg.text}</Typography>
-            <Typography 
-              variant="caption" 
-              sx={{ 
-                display: 'block',
-                textAlign: 'right',
-                color: 'text.secondary'
-              }}
-            >
-              {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-            </Typography>
+            {msg.id !== 'template' && (
+              <Typography 
+                variant="caption" 
+                sx={{ 
+                  display: 'block',
+                  textAlign: 'right',
+                  color: 'text.secondary'
+                }}
+              >
+                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              </Typography>
+            )}
           </Box>
         ))}
       </Box>

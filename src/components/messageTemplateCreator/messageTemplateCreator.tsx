@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
 import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel } from '@mui/material';
 
@@ -6,10 +6,26 @@ export const MessageTemplatePreview = () => {
   const [modelName, setModelName] = useState('');
   const [modelCategory, setModelCategory] = useState('Utility');
   const [messageContent, setMessageContent] = useState('');
+  const [showPreview, setShowPreview] = useState(false);
+
+  const handleSubmit = () => {
+    const templateData = {
+      modelName,
+      modelCategory,
+      messageContent,
+      // Adicione outros campos conforme necessário
+    };
+    
+    console.log("Dados do Template:", templateData);
+    // Aqui você pode adicionar uma chamada API para enviar os dados
+    // Exemplo: axios.post('/api/templates', templateData)
+    
+    setShowPreview(true);
+    alert("Template enviado para análise com sucesso!");
+  };
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f5f5f5', p: 2 }}>
-      {/* Form Section */}
       <Box sx={{ flex: 1, maxWidth: 'xl', mr: 2 }}>
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           <Typography variant="h5" component="h1" sx={{ mb: 3, fontWeight: 600 }}>
@@ -113,9 +129,19 @@ export const MessageTemplatePreview = () => {
                 bgcolor: 'primary.main',
                 '&:hover': { bgcolor: 'primary.dark' }
               }}
+              onClick={handleSubmit}
             >
               Enviar Para Análise
             </Button>
+
+            {showPreview && (
+              <Paper sx={{ p: 3, mt: 3, borderRadius: 2 }}>
+                <Typography variant="h6" sx={{ mb: 2 }}>Pré-visualização do Template</Typography>
+                <Typography><strong>Nome do Modelo:</strong> {modelName}</Typography>
+                <Typography><strong>Categoria:</strong> {modelCategory}</Typography>
+                <Typography><strong>Mensagem:</strong> {messageContent}</Typography>
+              </Paper>
+            )}
           </Box>
         </Paper>
       </Box>
@@ -126,6 +152,7 @@ export const MessageTemplatePreview = () => {
           contactAvatar="/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png"
           onBackClick={() => console.log('Back clicked')}
           onSendMessage={(message) => console.log('Message sent:', message)}
+          templateContent={messageContent}
           initialMessages={[
             {
               id: '1',
@@ -139,4 +166,3 @@ export const MessageTemplatePreview = () => {
     </Box>
   );
 };
-
