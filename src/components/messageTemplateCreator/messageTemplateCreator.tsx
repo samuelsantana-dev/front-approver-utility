@@ -1,13 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
 import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel } from '@mui/material';
-// import {
-//   TextFields as TextIcon,
-//   Image as ImageIcon,
-//   Videocam as VideoIcon,
-//   Audiotrack as AudioIcon,
-//   AttachFile as FileIcon
-// } from '@mui/icons-material';
 import AudioInputMUI from '../buttons/buttonAudio';
 import ImageInputMUI from '../buttons/buttonImages';
 import VideoInputMUI from '../buttons/buttonVideo';
@@ -17,14 +11,30 @@ export const MessageTemplatePreview = () => {
   const [modelName, setModelName] = useState('');
   const [modelCategory, setModelCategory] = useState('Utility');
   const [messageContent, setMessageContent] = useState('');
+  const [footerContent, setFooterContent] = useState('');
   const [showPreview, setShowPreview] = useState(false);
 
+  const [headerText, setHeaderText] = useState<string | number>(String || null || Number);
+  const [headerImage, setHeaderImage] = useState(null);
+  const [headerVideo, setHeaderVideo] = useState(null);
+  const [headerAudio, setHeaderAudio] = useState(null);
+
+  const handleHeaderTextChange = (text: string | number) => setHeaderText(text);
+  const handleHeaderImageChange = (image: any) => setHeaderImage(image);
+  const handleHeaderVideoChange = (video: any) => setHeaderVideo(video);
+  const handleHeaderAudioChange = (audio: any) => setHeaderAudio(audio);
 
   const handleSubmit = () => {
     const templateData = {
       modelName,
       modelCategory,
       messageContent,
+      header: {
+        text: headerText,
+        image: headerImage,
+        video: headerVideo,
+        audio: headerAudio,
+      },
     };
     
     console.log("Dados do Template:", templateData);
@@ -76,20 +86,11 @@ export const MessageTemplatePreview = () => {
               </Button>
             </Box>
 
-            <Box>
-              <Typography variant="h6" sx={{ mb: 1 }}>
-                Cabeçalho <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
-              </Typography>
-              <Box sx={{ display: 'flex', mb: 2 }}>
-              <TextInputMUI />
-
-              <ImageInputMUI />
-
-              <VideoInputMUI />
-
-              <AudioInputMUI />
-
-              </Box>
+            <Box sx={{ display: 'flex', mb: 2 }}>
+              <TextInputMUI onTextChange={handleHeaderTextChange} />
+              <ImageInputMUI onImageChange={handleHeaderImageChange} />
+              <VideoInputMUI onVideoChange={handleHeaderVideoChange} />
+              <AudioInputMUI onAudioChange={handleHeaderAudioChange} />
             </Box>
 
             <Box>
@@ -110,6 +111,8 @@ export const MessageTemplatePreview = () => {
               </Typography>
               <TextField
                 fullWidth
+                onChange={(e) => setFooterContent(e.target.value)}
+                value={footerContent}
                 placeholder="Texto do rodapé"
               />
             </Box>
@@ -155,10 +158,11 @@ export const MessageTemplatePreview = () => {
           onBackClick={() => console.log('Back clicked')}
           onSendMessage={(message) => console.log('Message sent:', message)}
           templateContent={messageContent}
+          rodape={footerContent}
           initialMessages={[
             {
               id: '1',
-              text: messageContent || 'Conteúdo da Mensagem',
+              text: messageContent,
               sender: 'contact',
               timestamp: new Date()
             }

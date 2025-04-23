@@ -5,9 +5,10 @@ import { UploadFile } from '@mui/icons-material';
 
 interface VideoInputMUIProps {
   onVideoFileSelected?: (file: File) => void;
+  onVideoChange?: (file: File) => void;
 }
 
-const VideoInputMUI: React.FC<VideoInputMUIProps> = ({ onVideoFileSelected }) => {
+const VideoInputMUI: React.FC<VideoInputMUIProps> = ({ onVideoFileSelected, onVideoChange }) => {
   const [videoFile, setVideoFile] = useState<File | null>(null);
   const [videoUrl, setVideoUrl] = useState<string | null>(null);
   const videoRef = React.useRef<HTMLVideoElement>(null);
@@ -19,6 +20,7 @@ const VideoInputMUI: React.FC<VideoInputMUIProps> = ({ onVideoFileSelected }) =>
       setVideoUrl(URL.createObjectURL(file));
       if (onVideoFileSelected) {
         onVideoFileSelected(file);
+        onVideoChange?.(file);
       }
     }
   };

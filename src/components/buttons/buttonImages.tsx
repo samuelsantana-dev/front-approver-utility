@@ -4,9 +4,10 @@ import {  UploadFile } from '@mui/icons-material';
 
 interface ImageInputMUIProps {
   onImageFileSelected?: (file: File) => void;
+  onImageChange?: (file: File) => void;
 }
 
-const ImageInputMUI: React.FC<ImageInputMUIProps> = ({ onImageFileSelected }) => {
+const ImageInputMUI: React.FC<ImageInputMUIProps> = ({ onImageFileSelected, onImageChange }) => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
@@ -14,6 +15,7 @@ const ImageInputMUI: React.FC<ImageInputMUIProps> = ({ onImageFileSelected }) =>
     const file = event.target.files?.[0];
     if (file) {
       setImageFile(file);
+      onImageChange?.(file);
       setImageUrl(URL.createObjectURL(file));
       if (onImageFileSelected) {
         onImageFileSelected(file);

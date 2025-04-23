@@ -9,6 +9,7 @@ interface WhatsAppChatProps {
   onSendMessage?: (message: string) => void;
   initialMessages?: Message[];
   templateContent?: string;
+  rodape?: string; 
 }
 
 interface Message {
@@ -23,7 +24,8 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   contactAvatar = "/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png",
   onBackClick = () => console.log('Back button clicked'),
   initialMessages = [],
-  templateContent = ''
+  templateContent = '',
+  rodape = ''
 }) => {
   const [messages, setMessages] = useState<Message[]>(() => {
     if (templateContent) {
@@ -72,7 +74,6 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
         borderRadius: 2
       }}
     >
-      {/* Status Bar */}
       <Box sx={{ bgcolor: '#128C7E', py: 0.5, px: 2, color: 'white' }}>
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="caption">12:13 PM</Typography>
@@ -143,19 +144,8 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
               boxShadow: msg.id === 'template' ? '0 2px 4px rgba(0,0,0,0.1)' : 'none'
             }}
           >
-            <Typography variant="body2">{msg.text}</Typography>
-            {msg.id !== 'template' && (
-              <Typography 
-                variant="caption" 
-                sx={{ 
-                  display: 'block',
-                  textAlign: 'right',
-                  color: 'text.secondary'
-                }}
-              >
-                {msg.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-              </Typography>
-            )}
+          <Typography variant="caption">{templateContent}</Typography> <br />
+          <Typography variant="caption">{rodape}</Typography>
           </Box>
         ))}
       </Box>

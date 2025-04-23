@@ -4,9 +4,10 @@ import { PlayArrow, Pause, UploadFile } from '@mui/icons-material';
 
 interface AudioInputMUIProps {
   onAudioFileSelected?: (file: File) => void;
+  onAudioChange?: (file: File) => void;
 }
 
-const AudioInputMUI: React.FC<AudioInputMUIProps> = ({ onAudioFileSelected }) => {
+const AudioInputMUI: React.FC<AudioInputMUIProps> = ({ onAudioFileSelected, onAudioChange }) => {
   const [audioFile, setAudioFile] = useState<File | null>(null);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -19,6 +20,7 @@ const AudioInputMUI: React.FC<AudioInputMUIProps> = ({ onAudioFileSelected }) =>
       setAudioUrl(URL.createObjectURL(file));
       if (onAudioFileSelected) {
         onAudioFileSelected(file);
+        onAudioChange?.(file);
       }
     }
   };
