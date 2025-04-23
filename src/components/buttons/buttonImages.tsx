@@ -31,10 +31,8 @@ const ImageInputMUI: React.FC<ImageInputMUIProps> = ({ onImageFileSelected }) =>
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 2,
         alignItems: 'center',
         padding: 3,
-        border: '1px solid #ccc',
         borderRadius: 2,
       }}
     >
@@ -52,7 +50,7 @@ const ImageInputMUI: React.FC<ImageInputMUIProps> = ({ onImageFileSelected }) =>
         onClick={handleChooseFile}
         startIcon={<UploadFile />}
       >
-        Selecionar Imagem
+         Imagem
       </Button>
 
       {imageUrl && (

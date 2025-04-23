@@ -30,13 +30,11 @@ const VideoInputMUI: React.FC<VideoInputMUIProps> = ({ onVideoFileSelected }) =>
 
   return (
     <Box
-      sx={{
+    sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 2,
         alignItems: 'center',
         padding: 3,
-        border: '1px solid #ccc',
         borderRadius: 2,
       }}
     >
@@ -54,7 +52,7 @@ const VideoInputMUI: React.FC<VideoInputMUIProps> = ({ onVideoFileSelected }) =>
         onClick={handleChooseFile}
         startIcon={<UploadFile />}
       >
-        Selecionar Vídeo
+     Vídeo
       </Button>
 
       {videoUrl && (
