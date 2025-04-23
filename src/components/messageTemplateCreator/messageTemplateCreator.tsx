@@ -80,8 +80,8 @@ export const MessageTemplatePreview = () => {
               <Typography variant="h6" sx={{ mb: 1 }}>
                 Cabeçalho <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
               </Typography>
-              <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
-              <TextInputMUI label={''} />
+              <Box sx={{ display: 'flex', mb: 2 }}>
+              <TextInputMUI />
 
               <ImageInputMUI />
 
