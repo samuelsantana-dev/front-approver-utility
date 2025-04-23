@@ -41,13 +41,11 @@ const AudioInputMUI: React.FC<AudioInputMUIProps> = ({ onAudioFileSelected }) =>
 
   return (
     <Box
-      sx={{
+    sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 2,
         alignItems: 'center',
         padding: 3,
-        border: '1px solid #ccc',
         borderRadius: 2,
       }}
     >
@@ -65,7 +63,7 @@ const AudioInputMUI: React.FC<AudioInputMUIProps> = ({ onAudioFileSelected }) =>
         onClick={handleChooseFile}
         startIcon={<UploadFile />}
       >
-        Selecionar Áudio
+         Áudio
       </Button>
 
       {audioUrl && (

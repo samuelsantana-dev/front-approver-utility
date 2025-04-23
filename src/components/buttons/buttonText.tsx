@@ -1,54 +1,50 @@
-import React, { useState } from 'react';
-import { TextField, Box, Typography } from '@mui/material';
+import React from 'react';
+import { Button, TextField, Box, Typography, Icon } from '@mui/material';
+import TextsmsOutlinedIcon from '@mui/icons-material/TextsmsOutlined';
 
-interface TextInputMUIProps {
-  label: string;
-  defaultValue?: string;
-  onChange?: (text: string) => void;
-  multiline?: boolean;
-  rows?: number;
-}
+function TextInputMUI() {
+  const [textValue, setTextValue] = React.useState('');
+  const [showTextField, setShowTextField] = React.useState(false);
 
-const TextInputMUI: React.FC<TextInputMUIProps> = ({
-  label,
-  defaultValue = '',
-  onChange,
-  multiline = false,
-  rows = 1,
-}) => {
-  const [text, setText] = useState<string>(defaultValue);
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const newText = event.target.value;
-    setText(newText);
-    if (onChange) {
-      onChange(newText);
-    }
+  const handleClick = () => {
+    setShowTextField(!showTextField);
   };
 
   return (
-    <Box
-      sx={{
+    <Box sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 1,
-        width: '100%',
-      }}
-    >
-      <Typography variant="subtitle1" component="label" htmlFor={`text-input-${label}`}>
-        {label}
-      </Typography>
-      <TextField
-        id={`text-input-${label}`}
-        value={text}
-        onChange={handleChange}
-        multiline={multiline}
-        rows={rows}
+        alignItems: 'center',
+        padding: 3,
+        borderRadius: 2,
+      }}>
+      <Button
+        type="button"
         variant="outlined"
         fullWidth
-      />
+        startIcon={<Icon component={TextsmsOutlinedIcon} />}
+        onClick={handleClick}
+      >
+        <Typography variant="body1">Texto</Typography>
+      </Button>
+      {showTextField && (
+        <TextField
+          type="text"
+          value={textValue}
+          onChange={(e) => setTextValue(e.target.value)}
+          placeholder="Digite seu texto aqui..."
+          fullWidth
+          variant="outlined"
+          label="Digite algo"
+          InputProps={{
+            startAdornment: (
+              <Icon component={TextsmsOutlinedIcon} sx={{ mr: 1 }} color="action" />
+            ),
+          }}
+        />
+      )}
     </Box>
   );
-};
+}
 
 export default TextInputMUI;
