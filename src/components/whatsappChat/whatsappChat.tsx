@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Typography, TextField, Paper } from '@mui/material';
-import { ArrowLeft, MoreVertical, Smile, Paperclip, Camera, Mic } from 'lucide-react';
+import { Box, IconButton, Typography, Paper } from '@mui/material';
+import { ArrowLeft, MoreVertical} from 'lucide-react';
 
 interface WhatsAppChatProps {
   contactName?: string;
@@ -22,7 +22,6 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
   contactName = "Erico Rocha",
   contactAvatar = "/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png",
   onBackClick = () => console.log('Back button clicked'),
-  onSendMessage,
   initialMessages = [],
   templateContent = ''
 }) => {
@@ -41,7 +40,6 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     return initialMessages;
   });
   
-  const [message, setMessage] = useState('');
 
   useEffect(() => {
     if (templateContent) {
@@ -60,21 +58,6 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     }
   }, [templateContent]);
 
-  const handleSendMessage = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim()) {
-      const newMessage: Message = {
-        id: Date.now().toString(),
-        text: message,
-        sender: 'user',
-        timestamp: new Date(),
-      };
-      
-      setMessages((prev) => [...prev, newMessage]);
-      if (onSendMessage) onSendMessage(message);
-      setMessage('');
-    }
-  };
   
   return (
     <Paper 
@@ -177,58 +160,6 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
         ))}
       </Box>
       
-      {/* Chat Input */}
-      <Box
-        component="form"
-        onSubmit={handleSendMessage}
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          gap: 1,
-          p: 1,
-          bgcolor: '#F0F0F0'
-        }}
-      >
-        <IconButton color="primary">
-          <Smile size={24} />
-        </IconButton>
-        
-        <TextField
-          placeholder="Mensagem..."
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          fullWidth
-          variant="standard"
-          sx={{
-            '& .MuiInput-root': {
-              bgcolor: 'white',
-              borderRadius: 2,
-              px: 2,
-              py: 1
-            }
-          }}
-        />
-        
-        <IconButton color="primary">
-          <Paperclip size={24} />
-        </IconButton>
-        
-        <IconButton color="primary">
-          <Camera size={24} />
-        </IconButton>
-        
-        <IconButton 
-          sx={{
-            bgcolor: '#128C7E',
-            color: 'white',
-            '&:hover': {
-              bgcolor: '#075E54'
-            }
-          }}
-        >
-          <Mic size={24} />
-        </IconButton>
-      </Box>
     </Paper>
   );
 };
