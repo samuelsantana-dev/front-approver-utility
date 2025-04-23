@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useForm, Controller } from 'react-hook-form';
 import { useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
 import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel } from '@mui/material';
@@ -6,42 +6,46 @@ import AudioInputMUI from '../buttons/buttonAudio';
 import ImageInputMUI from '../buttons/buttonImages';
 import VideoInputMUI from '../buttons/buttonVideo';
 import TextInputMUI from '../buttons/buttonText';
+import { LanguageSelector } from '../buttons/newLenguage';
+
+interface FormValues {
+  modelName: string;
+  modelCategory: string;
+  messageContent: string;
+  footerContent: string;
+  header: {
+    text: string;
+    image: File | null;
+    video: File | null;
+    audio: File | null;
+  };
+}
 
 export const MessageTemplatePreview = () => {
-  const [modelName, setModelName] = useState('');
-  const [modelCategory, setModelCategory] = useState('Utility');
-  const [messageContent, setMessageContent] = useState('');
-  const [footerContent, setFooterContent] = useState('');
+  const { control, handleSubmit, watch, formState: { errors } } = useForm<FormValues>({
+    defaultValues: {
+      modelName: '',
+      modelCategory: 'Utility',
+      messageContent: '',
+      footerContent: '',
+      header: {
+        text: '',
+        image: null,
+        video: null,
+        audio: null
+      }
+    }
+  });
+
   const [showPreview, setShowPreview] = useState(false);
 
-  const [headerText, setHeaderText] = useState<string | number>(String || null || Number);
-  const [headerImage, setHeaderImage] = useState(null);
-  const [headerVideo, setHeaderVideo] = useState(null);
-  const [headerAudio, setHeaderAudio] = useState(null);
-
-  const handleHeaderTextChange = (text: string | number) => setHeaderText(text);
-  const handleHeaderImageChange = (image: any) => setHeaderImage(image);
-  const handleHeaderVideoChange = (video: any) => setHeaderVideo(video);
-  const handleHeaderAudioChange = (audio: any) => setHeaderAudio(audio);
-
-  const handleSubmit = () => {
-    const templateData = {
-      modelName,
-      modelCategory,
-      messageContent,
-      header: {
-        text: headerText,
-        image: headerImage,
-        video: headerVideo,
-        audio: headerAudio,
-      },
-    };
-    
-    console.log("Dados do Template:", templateData);
-    
+  const onSubmit = (data: FormValues) => {
+    console.log("Dados do Template:", data);
     setShowPreview(true);
     alert("Template enviado para análise com sucesso!");
   };
+
+  const formValues = watch();
 
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f5f5f5', p: 2 }}>
@@ -51,71 +55,121 @@ export const MessageTemplatePreview = () => {
             Criar modelo
           </Typography>
           
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-            <TextField
-              label="Nome do Modelo"
-              value={modelName}
-              onChange={(e) => setModelName(e.target.value)}
-              fullWidth
-              placeholder="Digite o nome do modelo"
+          <Box 
+            component="form" 
+            onSubmit={handleSubmit(onSubmit)} 
+            sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}
+          >
+            <Controller
+              name="modelName"
+              control={control}
+              rules={{ required: 'Nome do modelo é obrigatório' }}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  label="Nome do Modelo"
+                  fullWidth
+                  placeholder="Digite o nome do modelo"
+                  error={!!errors.modelName}
+                  helperText={errors.modelName?.message}
+                />
+              )}
             />
 
-            <FormControl fullWidth>
-              <InputLabel>Categoria do modelo</InputLabel>
-              <Select
-                value={modelCategory}
-                label="Categoria do modelo"
-                onChange={(e) => setModelCategory(e.target.value)}
-              >
-                <MenuItem value="Utility">Utility</MenuItem>
-                <MenuItem value="Marketing">Marketing</MenuItem>
-                <MenuItem value="Sales">Sales</MenuItem>
-              </Select>
-            </FormControl>
+            <Controller
+              name="modelCategory"
+              control={control}
+              render={({ field }) => (
+                <FormControl fullWidth>
+                  <InputLabel>Categoria do modelo</InputLabel>
+                  <Select
+                    {...field}
+                    label="Categoria do modelo"
+                  >
+                    <MenuItem value="Utility">Utility</MenuItem>
+                    <MenuItem value="Marketing">Marketing</MenuItem>
+                    <MenuItem value="Sales">Sales</MenuItem>
+                  </Select>
+                </FormControl>
+              )}
+            />
 
             <Box>
               <Typography variant="body1" sx={{ mb: 1, fontWeight: 500 }}>
                 Idiomas
               </Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 1 }}>
-                <Typography sx={{ color: 'success.main' }}>Portuguese (BR)</Typography>
-                <Button sx={{ minWidth: 'auto', p: 0, color: 'text.secondary' }}>×</Button>
+                <LanguageSelector />
               </Box>
-              <Button sx={{ color: 'primary.main', textTransform: 'none' }}>
-                + Novo idioma
-              </Button>
             </Box>
 
             <Box sx={{ display: 'flex', mb: 2 }}>
-              <TextInputMUI onTextChange={handleHeaderTextChange} />
-              <ImageInputMUI onImageChange={handleHeaderImageChange} />
-              <VideoInputMUI onVideoChange={handleHeaderVideoChange} />
-              <AudioInputMUI onAudioChange={handleHeaderAudioChange} />
-            </Box>
-
-            <Box>
-              <Typography variant="h6" sx={{ mb: 1 }}>Mensagem</Typography>
-              <TextField
-                multiline
-                rows={4}
-                value={messageContent}
-                onChange={(e) => setMessageContent(e.target.value)}
-                fullWidth
-                placeholder="Conteúdo da Mensagem"
+              <Controller
+                name="header.text"
+                control={control}
+                render={({ field }) => (
+                  <TextInputMUI onTextChange={field.onChange} />
+                )}
+              />
+              <Controller
+                name="header.image"
+                control={control}
+                render={({ field }) => (
+                  <ImageInputMUI onImageChange={field.onChange} />
+                )}
+              />
+              <Controller
+                name="header.video"
+                control={control}
+                render={({ field }) => (
+                  <VideoInputMUI onVideoChange={field.onChange} />
+                )}
+              />
+              <Controller
+                name="header.audio"
+                control={control}
+                render={({ field }) => (
+                  <AudioInputMUI onAudioChange={field.onChange} />
+                )}
               />
             </Box>
 
-            <Box>
-              <Typography variant="h6" sx={{ mb: 1 }}>
-                Rodapé <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
-              </Typography>
-              <TextField
-                fullWidth
-                onChange={(e) => setFooterContent(e.target.value)}
-                value={footerContent}
-                placeholder="Texto do rodapé"
-              />
-            </Box>
+            <Controller
+              name="messageContent"
+              control={control}
+              rules={{ required: 'Conteúdo da mensagem é obrigatório' }}
+              render={({ field }) => (
+                <Box>
+                  <Typography variant="h6" sx={{ mb: 1 }}>Mensagem</Typography>
+                  <TextField
+                    {...field}
+                    multiline
+                    rows={4}
+                    fullWidth
+                    placeholder="Conteúdo da Mensagem"
+                    error={!!errors.messageContent}
+                    helperText={errors.messageContent?.message}
+                  />
+                </Box>
+              )}
+            />
+
+            <Controller
+              name="footerContent"
+              control={control}
+              render={({ field }) => (
+                <Box>
+                  <Typography variant="h6" sx={{ mb: 1 }}>
+                    Rodapé <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
+                  </Typography>
+                  <TextField
+                    {...field}
+                    fullWidth
+                    placeholder="Texto do rodapé"
+                  />
+                </Box>
+              )}
+            />
 
             <Box>
               <Typography variant="h6" sx={{ mb: 1 }}>
@@ -127,6 +181,7 @@ export const MessageTemplatePreview = () => {
             </Box>
 
             <Button
+              type="submit"
               variant="contained"
               fullWidth
               sx={{
@@ -134,7 +189,6 @@ export const MessageTemplatePreview = () => {
                 bgcolor: 'primary.main',
                 '&:hover': { bgcolor: 'primary.dark' }
               }}
-              onClick={handleSubmit}
             >
               Enviar Para Análise
             </Button>
@@ -142,9 +196,9 @@ export const MessageTemplatePreview = () => {
             {showPreview && (
               <Paper sx={{ p: 3, mt: 3, borderRadius: 2 }}>
                 <Typography variant="h6" sx={{ mb: 2 }}>Pré-visualização do Template</Typography>
-                <Typography><strong>Nome do Modelo:</strong> {modelName}</Typography>
-                <Typography><strong>Categoria:</strong> {modelCategory}</Typography>
-                <Typography><strong>Mensagem:</strong> {messageContent}</Typography>
+                <Typography><strong>Nome do Modelo:</strong> {formValues.modelName}</Typography>
+                <Typography><strong>Categoria:</strong> {formValues.modelCategory}</Typography>
+                <Typography><strong>Mensagem:</strong> {formValues.messageContent}</Typography>
               </Paper>
             )}
           </Box>
@@ -157,12 +211,12 @@ export const MessageTemplatePreview = () => {
           contactAvatar="/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png"
           onBackClick={() => console.log('Back clicked')}
           onSendMessage={(message) => console.log('Message sent:', message)}
-          templateContent={messageContent}
-          rodape={footerContent}
+          templateContent={formValues.messageContent}
+          rodape={formValues.footerContent}
           initialMessages={[
             {
               id: '1',
-              text: messageContent,
+              text: formValues.messageContent,
               sender: 'contact',
               timestamp: new Date()
             }
