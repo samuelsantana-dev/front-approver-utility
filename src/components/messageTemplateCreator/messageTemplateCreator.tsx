@@ -1,6 +1,17 @@
 import { useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
 import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel } from '@mui/material';
+// import {
+//   TextFields as TextIcon,
+//   Image as ImageIcon,
+//   Videocam as VideoIcon,
+//   Audiotrack as AudioIcon,
+//   AttachFile as FileIcon
+// } from '@mui/icons-material';
+import AudioInputMUI from '../buttons/buttonAudio';
+import ImageInputMUI from '../buttons/buttonImages';
+import VideoInputMUI from '../buttons/buttonVideo';
+import TextInputMUI from '../buttons/buttonText';
 
 export const MessageTemplatePreview = () => {
   const [modelName, setModelName] = useState('');
@@ -8,17 +19,15 @@ export const MessageTemplatePreview = () => {
   const [messageContent, setMessageContent] = useState('');
   const [showPreview, setShowPreview] = useState(false);
 
+
   const handleSubmit = () => {
     const templateData = {
       modelName,
       modelCategory,
       messageContent,
-      // Adicione outros campos conforme necessário
     };
     
     console.log("Dados do Template:", templateData);
-    // Aqui você pode adicionar uma chamada API para enviar os dados
-    // Exemplo: axios.post('/api/templates', templateData)
     
     setShowPreview(true);
     alert("Template enviado para análise com sucesso!");
@@ -72,21 +81,14 @@ export const MessageTemplatePreview = () => {
                 Cabeçalho <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
               </Typography>
               <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 2 }}>
-                {['Texto', 'Imagem', 'Video', 'Arquivo'].map((item) => (
-                  <Button
-                    key={item}
-                    variant="outlined"
-                    sx={{
-                      px: 2,
-                      py: 1.5,
-                      color: 'text.secondary',
-                      borderColor: 'divider',
-                      '&:hover': { bgcolor: 'action.hover' }
-                    }}
-                  >
-                    {item}
-                  </Button>
-                ))}
+              <TextInputMUI label={''} />
+
+              <ImageInputMUI />
+
+              <VideoInputMUI />
+
+              <AudioInputMUI />
+
               </Box>
             </Box>
 
