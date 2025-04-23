@@ -2,7 +2,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
 import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel } from '@mui/material';
-import AudioInputMUI from '../buttons/buttonAudio';
 import ImageInputMUI from '../buttons/buttonImages';
 import VideoInputMUI from '../buttons/buttonVideo';
 import TextInputMUI from '../buttons/buttonText';
@@ -125,13 +124,6 @@ export const MessageTemplatePreview = () => {
                   <VideoInputMUI onVideoChange={field.onChange} />
                 )}
               />
-              <Controller
-                name="header.audio"
-                control={control}
-                render={({ field }) => (
-                  <AudioInputMUI onAudioChange={field.onChange} />
-                )}
-              />
             </Box>
 
             <Controller
@@ -206,21 +198,12 @@ export const MessageTemplatePreview = () => {
       </Box>
 
       <Box sx={{ width: 400, flexShrink: 0 }}>
-        <WhatsAppChat 
-          contactName="Erico Rocha"
-          contactAvatar="/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png"
-          onBackClick={() => console.log('Back clicked')}
-          onSendMessage={(message) => console.log('Message sent:', message)}
+      <WhatsAppChat
           templateContent={formValues.messageContent}
           rodape={formValues.footerContent}
-          initialMessages={[
-            {
-              id: '1',
-              text: formValues.messageContent,
-              sender: 'contact',
-              timestamp: new Date()
-            }
-          ]}
+          headerText={formValues.header.text}
+          headerImage={formValues.header.image}
+          headerVideo={formValues.header.video}
         />
       </Box>
     </Box>
