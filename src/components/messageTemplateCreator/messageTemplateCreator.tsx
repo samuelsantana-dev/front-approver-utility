@@ -58,7 +58,7 @@ export const MessageTemplatePreview = () => {
   const formValues = watch();
 
   return (
-    <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: '#f5f5f5', p: 2 }}>
+    <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', bgcolor: '#f5f5f5', p: 2 }}>
       <Box sx={{ flex: 1, maxWidth: 'xl', mr: 2 }}>
         <Paper sx={{ p: 3, borderRadius: 2 }}>
           <Typography variant="h5" component="h1" sx={{ mb: 3, fontWeight: 600 }}>
