@@ -48,7 +48,7 @@ function TextInputMUI({ onTextChange }: TextInputMUIProps) {
           fullWidth
           variant="outlined"
           label="Digite algo"
-          sx={{ mt: 5, width: '100%' }}
+          sx={{ mt: 5 }}
           InputProps={{
             startAdornment: (
               <Icon component={TextsmsOutlinedIcon} sx={{ mr: 1 }} color="action" />
