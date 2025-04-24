@@ -1,17 +1,20 @@
 import { useForm, Controller } from 'react-hook-form';
 import { useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
-import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel } from '@mui/material';
+import { Box, TextField, Select, MenuItem, Typography, Button, Paper, FormControl, InputLabel, SelectChangeEvent } from '@mui/material';
 import ImageInputMUI from '../buttons/buttonImages';
 import VideoInputMUI from '../buttons/buttonVideo';
 import TextInputMUI from '../buttons/buttonText';
 import { LanguageSelector } from '../buttons/newLenguage';
+import React from 'react';
+import { Botoes } from '../../types/enum';
 
 interface FormValues {
   modelName: string;
   modelCategory: string;
   messageContent: string;
   footerContent: string;
+  buttonUrlOrResponse: number;
   header: {
     text: string;
     image: File | null;
@@ -30,6 +33,7 @@ export const MessageTemplatePreview = () => {
       modelCategory: 'Utility',
       messageContent: '',
       footerContent: '',
+      buttonUrlOrResponse: 0,
       header: {
         text: '',
         image: null,
@@ -57,6 +61,21 @@ export const MessageTemplatePreview = () => {
 
   const formValues = watch();
 
+  const [age, setAge] = React.useState<string | number>('');
+  const [open, setOpen] = React.useState(false);
+
+  const handleChange = (event: SelectChangeEvent<typeof age>) => {
+    setAge(event.target.value);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+  
   return (
     <Box sx={{ display: 'flex', minHeight: '100vh', width: '100%', bgcolor: '#f5f5f5', p: 2 }}>
       <Box sx={{ flex: 1, maxWidth: 'xl', mr: 2 }}>
@@ -206,14 +225,38 @@ export const MessageTemplatePreview = () => {
               )}
             />
 
-            <Box>
-              <Typography variant="h6" sx={{ mb: 1 }}>
-                Botões <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
-              </Typography>
-              <Button sx={{ color: 'primary.main', textTransform: 'none' }}>
-                + Adicionar botão
-              </Button>
-            </Box>
+          <Controller
+            name="buttonUrlOrResponse"
+            control={control}
+            render={({ field }) => (
+              <Box>
+                <Typography variant="h6" sx={{ mb: 1 }}>
+                  Botões <Typography component="span" sx={{ color: 'text.secondary', fontSize: '0.875rem' }}>Opcional</Typography>
+                </Typography>
+                <FormControl sx={{ m: 1, width: '100%' }}>
+                  <InputLabel id="buttonUrlOrResponse">Age</InputLabel>
+                  <Select
+                    {...field}
+                    labelId="buttonUrlOrResponse"
+                    id="buttonUrlOrResponse"
+                    name='buttonUrlOrResponse'
+                    open={open}
+                    onClose={handleClose}
+                    onOpen={handleOpen}
+                    value={age}
+                    label="Age"
+                    onChange={handleChange}
+                  >
+                    <MenuItem value="">
+                      <em>None</em>
+                    </MenuItem>
+                    <MenuItem value={Botoes.buttonUrl}>Botão de url</MenuItem>
+                    <MenuItem value={Botoes.buttonResponse}>Botão de resposta</MenuItem>
+                  </Select>
+                </FormControl>
+              </Box>
+            )}
+          />
 
             <Button
               type="submit"
