@@ -20,8 +20,11 @@ interface FormValues {
   };
 }
 
+type HeaderType = 'text' | 'image' | 'video' | null;
+
+
 export const MessageTemplatePreview = () => {
-  const { control, handleSubmit, watch, formState: { errors } } = useForm<FormValues>({
+  const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>({
     defaultValues: {
       modelName: '',
       modelCategory: 'Utility',
@@ -37,6 +40,14 @@ export const MessageTemplatePreview = () => {
   });
 
   const [showPreview, setShowPreview] = useState(false);
+  const [activeHeader, setActiveHeader] = useState<HeaderType>(null);
+
+  const handleHeaderTypeChange = (type: HeaderType) => {
+    setValue('header.text', '');
+    setValue('header.image', null);
+    setValue('header.video', null);
+    setActiveHeader(type);
+  };
 
   const onSubmit = (data: FormValues) => {
     console.log("Dados do Template:", data);
@@ -102,28 +113,60 @@ export const MessageTemplatePreview = () => {
               </Box>
             </Box>
 
-            <Box sx={{ display: 'flex', mb: 2 }}>
-              <Controller
-                name="header.text"
-                control={control}
-                render={({ field }) => (
-                  <TextInputMUI onTextChange={field.onChange} />
-                )}
-              />
-              <Controller
-                name="header.image"
-                control={control}
-                render={({ field }) => (
-                  <ImageInputMUI onImageChange={field.onChange} />
-                )}
-              />
-              <Controller
-                name="header.video"
-                control={control}
-                render={({ field }) => (
-                  <VideoInputMUI onVideoChange={field.onChange} />
-                )}
-              />
+            <Box>
+              <Typography variant="body1" sx={{ mb: 1, fontWeight: 500 }}>
+                Cabeçalho (selecione um tipo)
+              </Typography>
+              <Box sx={{ display: 'flex', gap: 1, mb: 2 }}>
+                <Button
+                  variant={activeHeader === 'text' ? 'contained' : 'outlined'}
+                  onClick={() => handleHeaderTypeChange('text')}
+                >
+                  Texto
+                </Button>
+                <Button
+                  variant={activeHeader === 'image' ? 'contained' : 'outlined'}
+                  onClick={() => handleHeaderTypeChange('image')}
+                >
+                  Imagem
+                </Button>
+                <Button
+                  variant={activeHeader === 'video' ? 'contained' : 'outlined'}
+                  onClick={() => handleHeaderTypeChange('video')}
+                >
+                  Vídeo
+                </Button>
+              </Box>
+
+              {activeHeader === 'text' && (
+                <Controller
+                  name="header.text"
+                  control={control}
+                  render={({ field }) => (
+                    <TextInputMUI onTextChange={field.onChange} />
+                  )}
+                />
+              )}
+
+              {activeHeader === 'image' && (
+                <Controller
+                  name="header.image"
+                  control={control}
+                  render={({ field }) => (
+                    <ImageInputMUI onImageChange={field.onChange} />
+                  )}
+                />
+              )}
+
+              {activeHeader === 'video' && (
+                <Controller
+                  name="header.video"
+                  control={control}
+                  render={({ field }) => (
+                    <VideoInputMUI onVideoChange={field.onChange} />
+                  )}
+                />
+              )}
             </Box>
 
             <Controller
@@ -199,7 +242,7 @@ export const MessageTemplatePreview = () => {
 
       <Box sx={{ width: 400, flexShrink: 0 }}>
       <WhatsAppChat
-          templateContent={formValues.messageContent}
+          // templateContent={formValues.messageContent}
           rodape={formValues.footerContent}
           headerText={formValues.header.text}
           headerImage={formValues.header.image}
