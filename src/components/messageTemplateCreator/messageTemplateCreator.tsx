@@ -53,9 +53,23 @@ export const MessageTemplatePreview = () => {
     setActiveHeader(type);
   };
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     console.log("Dados do Template:", data);
     setShowPreview(true);
+    try {
+      const responseJson = await fetch('SUA_URL_API_JSON', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+      const responseDataJson = await responseJson.json();
+      console.log('Resposta da API (JSON):', responseDataJson);
+    } catch (error) {
+      console.error('Erro ao enviar dados como JSON:', error);
+    }
+    
     alert("Template enviado para análise com sucesso!");
   };
 
@@ -224,7 +238,7 @@ export const MessageTemplatePreview = () => {
                 </Box>
               )}
             />
-
+ 
           <Controller
             name="buttonUrlOrResponse"
             control={control}
