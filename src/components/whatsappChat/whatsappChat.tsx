@@ -22,7 +22,7 @@ interface Message {
 }
 
 const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
-  contactName = "Erico Rocha",
+  contactName = " nome da sua api",
   contactAvatar = "/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png",
   onBackClick = () => console.log('Back button clicked'),
   initialMessages = [],
