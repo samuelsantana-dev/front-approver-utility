@@ -35,8 +35,12 @@ export const ResponseIa = () => {
     setOpen(false);
     setResponseIA(null);
     setIaChance(0);
+    window.location.reload();
   };
 
+  const handleIaResponse = () => {
+      // Mostrar sugestões da IA
+  }
   const handleEdit = () => {
     console.log("Carregando dados para edição...", responseIA);
     handleClose();
@@ -73,6 +77,9 @@ export const ResponseIa = () => {
               </Button>
               <Button variant="outlined" onClick={handleEdit}>
                 Editar
+              </Button>
+              <Button variant="outlined" color="primary" onClick={handleIaResponse}>
+                Sugestões IA
               </Button>
               {iaChance >= 80 && (
                 <Button variant="contained" color="success" onClick={handleApprove}>
