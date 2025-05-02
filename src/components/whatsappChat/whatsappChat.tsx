@@ -63,40 +63,26 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({ data }) => {
           }}>
             {renderHeaderMedia()}
             {data.header.text && (
-              <Typography variant="body1" sx={{ mt: 1 }}>
+              <Typography variant="body1" sx={{ mt: 1, textAlign: 'left' }}>
                 {data.header.text}
               </Typography>
             )}
-          </Box>
-        )}
-
-        {/* Mensagem principal */}
-        <Box
-          sx={{
-            maxWidth: '80%',
-            bgcolor: '#EDF7FF',
-            borderRadius: '18px 18px 18px 0',
-            p: 2,
-            mb: 2,
-            border: '1px dashed #128C7E',
-            boxShadow: 1,
-            wordBreak: 'break-word'
-          }}
-        >
-          <Typography variant="body1">{data.messageContent}</Typography>
+            <Typography variant="body1" sx={{ textAlign: 'left'}}>{data.messageContent}</Typography>
           {data.footerContent && (
             <Typography
               variant="caption"
               sx={{
                 display: 'block',
                 mt: 1,
-                color: '#666'
+                color: '#666',
+                textAlign: 'left'
               }}
             >
               {data.footerContent}
             </Typography>
           )}
-        </Box>
+          </Box>
+        )}
       </Box>
       <FooterChat />
     </Paper>
