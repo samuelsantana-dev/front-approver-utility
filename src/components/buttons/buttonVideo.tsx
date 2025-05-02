@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Typography, Box, Button } from '@mui/material';
-import {  } from '@mui/material/Box';
 import { UploadFile } from '@mui/icons-material';
 
 interface VideoInputMUIProps {
