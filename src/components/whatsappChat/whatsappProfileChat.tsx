@@ -7,10 +7,10 @@ const WhatsAppProfileImage: React.FC = () => {
         src="/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png" 
         alt="Profile" 
         className="w-full h-full object-cover"
-        onError={(e) => {
-          const target = e.target as HTMLImageElement;
-          target.src = "https://via.placeholder.com/40";
-        }}
+        // onError={(e) => {
+        //   const target = e.target as HTMLImageElement;
+        //   target.src = "https://via.placeholder.com/40";
+        // }}
       />
     </div>
   );

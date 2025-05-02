@@ -7,27 +7,15 @@ import VideoInputMUI from '../buttons/buttonVideo';
 import TextInputMUI from '../buttons/buttonText';
 import { LanguageSelector } from '../buttons/newLenguage';
 import React from 'react';
-import { Botoes } from '../../types/enum';
+import { Botoes, chatValues } from '../../types/enum';
+import { ResponseIa } from '../responseIa/responseIa';
 
-interface FormValues {
-  modelName: string;
-  modelCategory: string;
-  messageContent: string;
-  footerContent: string;
-  buttonUrlOrResponse: number;
-  header: {
-    text: string;
-    image: File | null;
-    video: File | null;
-    audio: File | null;
-  };
-}
 
 type HeaderType = 'text' | 'image' | 'video' | null;
 
 
 export const MessageTemplatePreview = () => {
-  const { control, handleSubmit, watch, setValue, formState: { errors } } = useForm<FormValues>({
+  const { control, handleSubmit, setValue, watch, formState: { errors } } = useForm<chatValues>({
     defaultValues: {
       modelName: '',
       modelCategory: 'Utility',
@@ -53,19 +41,11 @@ export const MessageTemplatePreview = () => {
     setActiveHeader(type);
   };
 
-  const onSubmit = async (data: FormValues) => {
-    console.log("Dados do Template:", data);
+  const onSubmit = async (data: chatValues) => {
+  
     setShowPreview(true);
     try {
-      const responseJson = await fetch('SUA_URL_API_JSON', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(data),
-      });
-      const responseDataJson = await responseJson.json();
-      console.log('Resposta da API (JSON):', responseDataJson);
+      console.log("Dados do Template:", data);
     } catch (error) {
       console.error('Erro ao enviar dados como JSON:', error);
     }
@@ -130,8 +110,6 @@ export const MessageTemplatePreview = () => {
                     label="Categoria do modelo"
                   >
                     <MenuItem value="Utility">Utility</MenuItem>
-                    <MenuItem value="Marketing">Marketing</MenuItem>
-                    <MenuItem value="Sales">Sales</MenuItem>
                   </Select>
                 </FormControl>
               )}
@@ -286,12 +264,7 @@ export const MessageTemplatePreview = () => {
             </Button>
 
             {showPreview && (
-              <Paper sx={{ p: 3, mt: 3, borderRadius: 2 }}>
-                <Typography variant="h6" sx={{ mb: 2 }}>Pré-visualização do Template</Typography>
-                <Typography><strong>Nome do Modelo:</strong> {formValues.modelName}</Typography>
-                <Typography><strong>Categoria:</strong> {formValues.modelCategory}</Typography>
-                <Typography><strong>Mensagem:</strong> {formValues.messageContent}</Typography>
-              </Paper>
+              <ResponseIa />
             )}
           </Box>
         </Paper>
@@ -299,11 +272,7 @@ export const MessageTemplatePreview = () => {
 
       <Box sx={{ width: 400, flexShrink: 0 }}>
       <WhatsAppChat
-          // templateContent={formValues.messageContent}
-          rodape={formValues.footerContent}
-          headerText={formValues.header.text}
-          headerImage={formValues.header.image}
-          headerVideo={formValues.header.video}
+          data={formValues}
         />
       </Box>
     </Box>

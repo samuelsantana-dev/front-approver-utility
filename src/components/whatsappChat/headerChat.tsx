@@ -56,9 +56,9 @@ export function HeaderChat({
               mr: 1,
               objectFit: 'cover'
             }}
-            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              e.currentTarget.src = "https://via.placeholder.com/40";
-            }}
+            // onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+            //   e.currentTarget.src = "https://via.placeholder.com/40";
+            // }}
           />
           <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
             {contactName}
