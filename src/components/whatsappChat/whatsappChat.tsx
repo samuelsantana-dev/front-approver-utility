@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Typography, Paper } from '@mui/material';
+import { Box, IconButton, Typography, Paper, TextField } from '@mui/material';
 import { ArrowLeft, MoreVertical } from 'lucide-react';
+import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
+import AttachFileIcon from '@mui/icons-material/AttachFile';
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
 
 interface WhatsAppChatProps {
   contactName?: string;
@@ -47,6 +51,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     return baseMessages;
   });
 
+  const [input,  setInput] = useState('');
   useEffect(() => {
     setMessages(prev => {
       const filtered = prev.filter(msg => msg.id !== 'template');
@@ -191,7 +196,6 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
           </Box>
         )}
 
-        {/* Messages */}
         {messages.map((msg) => (
           <Box 
             key={msg.id}
@@ -224,6 +228,54 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
           </Box>
         ))}
       </Box>
+
+      <Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    padding: 1,
+    borderTop: '1px solid #ccc',
+    backgroundColor: '#f0f0f0',
+  }}
+>
+  <IconButton>
+    <InsertEmoticonIcon sx={{ color: '#54656f' }} />
+  </IconButton>
+
+  <TextField
+    fullWidth
+    variant="outlined"
+    size="small"
+    placeholder="Mensagem..."
+    value={input}
+    onChange={(e) => setInput(e.target.value)}
+    sx={{
+      backgroundColor: 'white',
+      borderRadius: 20,
+      mx: 1,
+      '& .MuiOutlinedInput-root': {
+        borderRadius: 20,
+        paddingRight: 1,
+      },
+    }}
+    InputProps={{
+      endAdornment: (
+        <>
+          <IconButton>
+            <AttachFileIcon sx={{ color: '#54656f' }} />
+          </IconButton>
+          <IconButton>
+            <CameraAltIcon sx={{ color: '#54656f' }} />
+          </IconButton>
+        </>
+      ),
+    }}
+  />
+
+  <IconButton sx={{ backgroundColor: '#25D366', color: 'white', ml: 1 }}>
+    <KeyboardVoiceIcon />
+  </IconButton>
+</Box>
     </Paper>
   );
 };
