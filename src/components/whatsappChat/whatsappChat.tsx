@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Typography, Paper, TextField } from '@mui/material';
-import { ArrowLeft, MoreVertical } from 'lucide-react';
-import InsertEmoticonIcon from '@mui/icons-material/InsertEmoticon';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import KeyboardVoiceIcon from '@mui/icons-material/KeyboardVoice';
+import { Box, Typography, Paper } from '@mui/material';
+import { chatValues, HeaderValues } from '../../types/enum';
+import { FooterChat } from './footerChat';
+import { HeaderChat } from './headerChat';
 
+interface WhatsAppChatProps {
+  data: chatValues;
+}
 interface WhatsAppChatProps {
   contactName?: string;
   contactAvatar?: string;
-  onBackClick?: () => void;
   initialMessages?: Message[];
   templateContent?: string;
   rodape?: string;
@@ -26,9 +26,6 @@ interface Message {
 }
 
 const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
-  contactName = " nome da sua api",
-  contactAvatar = "/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png",
-  onBackClick = () => console.log('Back button clicked'),
   initialMessages = [],
   templateContent = '',
   rodape = '',
@@ -51,7 +48,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     return baseMessages;
   });
 
-  const [input,  setInput] = useState('');
+  
   useEffect(() => {
     setMessages(prev => {
       const filtered = prev.filter(msg => msg.id !== 'template');
@@ -101,73 +98,26 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
     return null;
   };
 
+  const headerData: HeaderValues = {
+    contactAvatar: "/lovable-uploads/5204afa5-366b-4bf7-b054-4274515582ab.png",
+    contactName: "Nome da sua API",
+  };
+
   return (
     <Paper 
       elevation={3}
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        height: '100vh',
+        height: '50%',
         maxWidth: 360,
         mx: 'auto',
         overflow: 'hidden',
         borderRadius: 2
       }}
     >
-      <Box sx={{ bgcolor: '#128C7E', py: 0.5, px: 2, color: 'white' }}>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="caption">12:13 PM</Typography>
-          <Box sx={{ display: 'flex', gap: 1 }}>
-            <Typography variant="caption">•••</Typography>
-            <Typography variant="caption">Wi-Fi</Typography>
-          </Box>
-        </Box>
-      </Box>
+     <HeaderChat data={headerData}  /> 
       
-      <Box sx={{ 
-        display: 'flex', 
-        alignItems: 'center', 
-        bgcolor: '#128C7E', 
-        color: 'white', 
-        p: 1,
-        position: 'sticky',
-        top: 0,
-        zIndex: 1
-      }}>
-        <IconButton 
-          onClick={onBackClick}
-          sx={{ color: 'white', mr: 1 }}
-        >
-          <ArrowLeft size={24} />
-        </IconButton>
-        
-        <Box sx={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-          <Box 
-            component="img"
-            src={contactAvatar}
-            alt={contactName}
-            sx={{
-              width: 40,
-              height: 40,
-              borderRadius: '50%',
-              mr: 1,
-              objectFit: 'cover'
-            }}
-            onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-              e.currentTarget.src = "https://via.placeholder.com/40";
-            }}
-          />
-          <Typography variant="subtitle1" sx={{ fontWeight: 500 }}>
-            {contactName}
-          </Typography>
-        </Box>
-        
-        <IconButton sx={{ color: 'white' }}>
-          <MoreVertical size={24} />
-        </IconButton>
-      </Box>
-      
-      {/* Chat Messages Area */}
       <Box 
         sx={{
           flex: 1,
@@ -228,54 +178,7 @@ const WhatsAppChat: React.FC<WhatsAppChatProps> = ({
           </Box>
         ))}
       </Box>
-
-      <Box
-  sx={{
-    display: 'flex',
-    alignItems: 'center',
-    padding: 1,
-    borderTop: '1px solid #ccc',
-    backgroundColor: '#f0f0f0',
-  }}
->
-  <IconButton>
-    <InsertEmoticonIcon sx={{ color: '#54656f' }} />
-  </IconButton>
-
-  <TextField
-    fullWidth
-    variant="outlined"
-    size="small"
-    placeholder="Mensagem..."
-    value={input}
-    onChange={(e) => setInput(e.target.value)}
-    sx={{
-      backgroundColor: 'white',
-      borderRadius: 20,
-      mx: 1,
-      '& .MuiOutlinedInput-root': {
-        borderRadius: 20,
-        paddingRight: 1,
-      },
-    }}
-    InputProps={{
-      endAdornment: (
-        <>
-          <IconButton>
-            <AttachFileIcon sx={{ color: '#54656f' }} />
-          </IconButton>
-          <IconButton>
-            <CameraAltIcon sx={{ color: '#54656f' }} />
-          </IconButton>
-        </>
-      ),
-    }}
-  />
-
-  <IconButton sx={{ backgroundColor: '#25D366', color: 'white', ml: 1 }}>
-    <KeyboardVoiceIcon />
-  </IconButton>
-</Box>
+        <FooterChat />
     </Paper>
   );
 };
