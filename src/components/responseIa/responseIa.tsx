@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import WhatsAppChat from "../whatsappChat/whatsappChat";
-import { Box, Modal } from '@mui/material';
+import { Box, Button, Modal, Stack } from '@mui/material';
 import { chatValues } from '../../types/enum';
 
 export const ResponseIa = () => {
   const [responseIA, setResponseIA] = useState<chatValues | null>(null);
   const [open, setOpen] = useState(false);
+  const [iaChance, setIaChance] = useState<number>(0);
 
   useEffect(() => {
-    // valores de teste
     const mockChatValues: chatValues = {
-      modelName: "Atendimento Automático",
+      modelName: "Atendimento Automático teste",
       modelCategory: "Suporte",
       messageContent: "Olá! Como posso te ajudar hoje?",
       footerContent: "Equipe de Suporte - Disponível 24h",
@@ -24,10 +24,28 @@ export const ResponseIa = () => {
     };
 
     setResponseIA(mockChatValues);
+
+    const chance = 85;
+    setIaChance(chance);
+
     setOpen(true);
   }, []);
 
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setOpen(false);
+    setResponseIA(null);
+    setIaChance(0);
+  };
+
+  const handleEdit = () => {
+    console.log("Carregando dados para edição...", responseIA);
+    handleClose();
+  };
+
+  const handleApprove = () => {
+    console.log("Aprovação enviada para meta.");
+    handleClose();
+  };
 
   return (
     <Modal open={open} onClose={handleClose}>
@@ -46,7 +64,23 @@ export const ResponseIa = () => {
         }}
       >
         {responseIA && (
-          <WhatsAppChat data={responseIA} />
+          <>
+            <WhatsAppChat data={responseIA} />
+
+            <Stack direction="row" spacing={2} justifyContent="flex-end" mt={3}>
+              <Button variant="outlined" color="error" onClick={handleClose}>
+                Cancelar
+              </Button>
+              <Button variant="outlined" onClick={handleEdit}>
+                Editar
+              </Button>
+              {iaChance >= 80 && (
+                <Button variant="contained" color="success" onClick={handleApprove}>
+                  Aprovar
+                </Button>
+              )}
+            </Stack>
+          </>
         )}
       </Box>
     </Modal>
